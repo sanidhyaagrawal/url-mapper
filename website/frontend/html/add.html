@@ -1,0 +1,143 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+      .container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.bottomm{
+    position: absolute;
+  bottom: 8px;
+  right: 16px;
+  font-size: 18px;
+}
+
+.topp{
+    position: absolute;
+  top: 8px;
+  left: 16px;
+  font-size: 18px;
+}
+
+  </style>
+</head>
+<body style="background-color: black;">
+    <div class="container">
+        <div class="row">
+            <div class =" topp pull-left" style="align-items: baseline;justify-content: baseline;text-align: end;">
+                <img src="https://i.ibb.co/0BF06VB/logo.png">
+            </div>
+        </div>
+        <form id="edit" name="edit">
+            <div class="form-group" style="width: 85vw;  max-width: 500px;">
+        
+              <input type="text" class="form-control" style="color:white;background-color: #000;" name="base" aria-describedby="emailHelp" placeholder="url.cruv.dev/" style="background-color: black;">
+
+            </div>
+
+            <div class="form-group">
+        
+                <input type="text" class="form-control" style="color:white;background-color: #000;" name="target" id="target" aria-describedby="emailHelp" placeholder="URL" style="background-color: black;" >
+
+              </div>
+             <div style="align-items: center;justify-content: center;text-align: center;">
+
+              <a id="login" href=""><i class="fa fa-check-circle" style="font-size:30px;color:white;"></i></a>
+            </div> 
+            </form>
+<div class="row">
+    <div class =" bottomm pull-right" style="align-items: baseline;justify-content: baseline;text-align: end;">
+      <a href="/admin/a0f4762cdeaecdb87576f634aec5bb0c904817ee6655d932de044dd890da398d/"><i class="fa fa-edit" style="font-size:30px;color:white;"></i></a>
+      <a href="logout"><i class="fa fa-sign-out" style="font-size:30px;color:white;"></i></a>
+
+    </div>
+</div>
+        
+    </div>
+
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src ="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script>
+  var lock = false
+  $('#login').click(function(e) {
+      e.preventDefault();
+      if (lock == false) {
+      lock = true
+      var myform = document.getElementById("edit");
+      var formData = new FormData(myform);
+      $('#login').prop('disabled', true);
+      $('#cancel').prop('disabled', true);
+      $("#login").html('<div class="spinner-border" style="width: 30px; height: 30px; color:white;" role="status"></div>');
+      $.ajax({
+          url: "/api/short/",
+          type: 'POST',
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function(data, textStatus, xhr) {
+            
+              console.log(data);
+              if(xhr.status == 200) {
+
+           
+
+
+                  $('#login').prop('disabled', false);
+                  $('#cancel').prop('disabled', false);
+                  $("#login").html('<p style="color:white; font-size:10px;">' + data.error + '</p>');
+                  setTimeout(function() {
+                    $("#login").html('<i class="fa fa-check-circle" style="font-size:30px;color:white;"></i>');
+                    lock = false
+                  }, 2000);
+                  
+              } else if(xhr.status == 202) {
+                  window.location.reload();
+              }
+          },
+          error: function(xhr, errmsg, err) {
+             
+              $('#login').prop('disabled', false);
+              $('#cancel').prop('disabled', false);
+              $("#login").html('<p style="color:white; font-size:10px;"> Something went wrong </p>');
+              setTimeout(function() {
+                $("#login").html('<i class="fa fa-check-circle" style="font-size:30px;color:white;"></i>');
+                lock = false
+              }, 2000);
+              
+          },
+      });
+    }
+  });
+
+
+  var input = document.getElementById("target");
+  input.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+     event.preventDefault();
+     document.getElementById("login").click();
+    }
+  });
+</script>
+
+  
