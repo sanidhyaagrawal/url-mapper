@@ -12,7 +12,18 @@ class sites_admin(ModelAdmin):
     readonly_fields = ('date',)
  
 
+ 
+
+class analytics_admin(ModelAdmin):
+    search_fields = ('source' ,'device')
+    list_display = ('site', 'source' ,'device', 'ip_location', 'ip', 'date')
+    list_display_links = ('site', 'source' ,'device', 'ip', 'date')
+    list_filter = ('site', 'source' ,'device', 'ip', 'date')
+
+    readonly_fields = ('date', 'ip_location')
+ 
 
 
 site.register(sites, sites_admin)
 
+site.register(analytics, analytics_admin)

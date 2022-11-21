@@ -1,0 +1,12 @@
+{
+    "production": {
+        "aws_region": "ap-south-1",
+        "django_settings": "url_shortener.settings",
+        "profile_name": "default",
+        "project_name": "url-shortener",
+        "runtime": "python3.8",
+        "s3_bucket": "url-shortener-s3",
+        "certificate_arn" : "arn:aws:acm:us-east-1:897623414313:certificate/0b0bb9e0-7fd6-4eaf-9514-46285617a6f7",
+        "domain" : "url.cruv.dev"
+    }
+}

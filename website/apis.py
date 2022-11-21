@@ -47,8 +47,14 @@ def shorten_api(request):
             print(e)
             return Response({'error': "invalid target URL"}, status=status.HTTP_200_OK)
 
+        if sites.objects.all().filter(sub_url=base).exists():
+            return Response({'error': "sub url alredy in use"}, status=status.HTTP_200_OK)
 
-        sites.objects.create(sub_url=base, target_url=target)
+        sites.objects.update_or_create(sub_url=base, target_url=target)
+        #obj, created = sites.objects.update_or_create(
+        #    sub_url=base,
+        #    defaults={'target_url': target},
+        #)
         return Response(status=status.HTTP_202_ACCEPTED)
     else:
         return Response(status=status.HTTP_401_UNAUTHORIZED)

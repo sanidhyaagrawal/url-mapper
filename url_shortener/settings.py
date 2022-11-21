@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'q_-p+z55)@pe$so%k%qr^8=sc_(y-4hiy1)ie4a8jnp8vx0huo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -37,12 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'rest_framework',
 ]
 
+INSTALLED_APPS += ['zappa_django_utils']
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -88,12 +93,25 @@ REST_FRAMEWORK = {
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'url_shortener_db',
+        'USER': 'sanidhyaagrawal',
+        'PASSWORD': 'iAqYQm0PdoExTDDcTH7qWJ9ZtTGKY8lydPY2Yjkolo6AhZshdkQANyCjfah11Sif8dyYj2kZPBAt8dC2am1bDXXT16tCEEcegBwQbriD9djCCyfh3QJmQrQuA2rC',
+        'HOST': 'cruv-db.clto4uy8pzsm.ap-south-1.rds.amazonaws.com',
+        'PORT': 5432,
+    }
+}
+
 
 
 # Password validation
@@ -132,12 +150,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'website/frontend/static'), #base static files
+] #dir
+
 STATIC_URL = '/static/'
 
-#frontend template paths
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'website/frontend/static'), 
-] #directories where the static files are located.
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 

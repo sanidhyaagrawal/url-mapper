@@ -20,10 +20,18 @@ def view_logout(request):
     return redirect("/")       
 
 
-    
-def url_redirect(request, sub_url):
+def url_redirect(request, sub_url, tracking_id = None):
     try:
         site_obj = sites.objects.get(sub_url=sub_url)
+        try:
+            device= request.META.get('HTTP_USER_AGENT').split("(")[1].split(")")[0]    
+            ip = request.META.get("HTTP_X_FORWARDED_FOR")
+        except:
+            device = None
+            ip = None
+
+        analytics.objects.create(device=device, source=tracking_id, ip=ip, site=site_obj)
+
     except sites.DoesNotExist:
         try:
             site_obj = sites.objects.get(sub_url="404")

@@ -9,6 +9,8 @@ urlpatterns = [
     path('api/login/', apis.login_api, name='login_api'), 
 
     path('<str:sub_url>', views.url_redirect, name='url_redirect'), 
+    path('<str:tracking_id>/<str:sub_url>', views.url_redirect, name='url_redirect'), 
+    path('<str:tracking_id>/<str:sub_url>/', views.url_redirect, name='url_redirect'), 
 
 ]
 
